@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Client {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  phone     String?
+  address   String?
+  projects  Project[]
+  createdAt DateTime @default(now())
+}
+
+model Project {
+  id            String   @id @default(cuid())
+  clientId      String
+  client        Client   @relation(fields: [clientId], references: [id])
+  title         String
+  photoUrl      String
+  nightPhotoUrl String?
+  mockupUrl     String?
+  measureJson   String?  // {polylines:[{points:[{x,y}], feet:number, type:'eave|ridge|peak'}], scalePxPerFt:number, confidence:'low|med|high'}
+  lightsJson    String?  // {preset:'C9 Warm', bulbsPerFt:1, pattern:'alt', colors:['#FFD8A8',...], glow:number}
+  pricingJson   String?  // {pricePerFt:{'C9 Warm':$}, addOns:[...], fees:{...}, taxPct: number}
+  totalsJson    String?  // {lf:number, materials:number, labor:number, tax:number, grandTotal:number}
+  status        String   // 'draft' | 'sent' | 'approved' | 'scheduled' | 'installed' | 'removed'
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
