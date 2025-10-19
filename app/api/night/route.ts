@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import sharp from 'sharp'
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: NextRequest) {
   try {
     const { photoUrl, intensity } = await request.json()
@@ -24,5 +26,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Night filter failed' }, { status: 500 })
   }
 }
+
 
 

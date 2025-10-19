@@ -1,6 +1,8 @@
 {
   "name": "christmas-lights-estimator",
   "version": "0.1.0",
+  "description": "Professional Christmas Lights Estimation Tool - Upload photos, measure distances, and get accurate lighting estimates",
+  "author": "Marcos <Mikasr411@gmail.com>",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,8 +12,16 @@
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "electron": "electron .",
+    "electron:dev": "concurrently \"npm run dev\" \"wait-on http://localhost:3000 http://localhost:3001 http://localhost:3002 && electron .\"",
+    "electron:build": "next build && electron-builder",
+    "electron:dist": "npm run electron:build",
+    "build:icons": "node scripts/build-icons.js",
+    "postinstall": "npm run build:icons"
   },
+  "main": "electron/main.js",
+  "homepage": "./",
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
     "@next-auth/prisma-adapter": "^1.0.7",
@@ -50,7 +60,6 @@
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.48.2",
     "resend": "^2.1.0",
-    "sharp": "^0.33.1",
     "stripe": "^14.9.0",
     "tailwind-merge": "^2.2.0",
     "tailwindcss-animate": "^1.0.7",
@@ -63,11 +72,55 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
+    "concurrently": "^9.2.1",
+    "electron": "^38.3.0",
+    "electron-builder": "^26.0.12",
     "eslint": "^8",
     "eslint-config-next": "14.0.4",
     "postcss": "^8",
     "prisma": "^5.7.1",
+    "sharp": "^0.34.4",
     "tailwindcss": "^3.3.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wait-on": "^9.0.1"
+  },
+  "build": {
+    "appId": "com.christmaslights.estimator",
+    "productName": "Christmas Lights Estimator",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "out/**/*",
+      "electron/**/*",
+      "assets/**/*",
+      "package.json",
+      "node_modules/**/*",
+      "!node_modules/@esbuild/aix-ppc64/**/*"
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "assets/icon.ico",
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Christmas Lights Estimator",
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.icns",
+      "category": "public.app-category.utilities"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/icon.png",
+      "category": "Utility"
+    }
   }
 }

@@ -43,3 +43,16 @@ prisma/dev.db
 
 # OS
 Thumbs.db
+
+# Electron build outputs
+/dist/
+*.exe
+*.dmg
+*.deb
+*.rpm
+*.AppImage
+*.snap
+
+# Build artifacts
+/build/
+*.log
